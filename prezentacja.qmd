@@ -1,0 +1,111 @@
+---
+title: "Dostępność połączeń kolejowych a gminy - wizualizacja"
+author: "Maja Panasiewicz"
+format: html
+toc: true
+toc-title: "Spis treści"
+editor: visual
+---
+
+## Zbiór danych
+
+W swoim projekcie użyłam samodzielnie utworzonej ramki danych. Używając metody scrapingu, za pomocą pakietu Selenium w Pythonie ściągnełam dane dotyczące stacji kolejowych w Polsce. Odjazdy z tych stacji ściągałam za pomocą pakietu rvest w R, natomiast do pobrania współrzędnych stacji użyłam zapytań API. Pozyskane w ten sposób dane połączyłam z ramką danych dotyczących gmin pobraną z Wikipedii. Użyte linki zostały podane poniżej:\
+<https://pl.wikipedia.org/wiki/Lista_gmin_w_Polsce>\
+<https://koleo.pl/dworce-pkp>\
+<https://koleo.pl/dworzec-pkp/wroclaw-glowny/odjazdy>
+
+```{r echo=FALSE,warning=FALSE}
+library(DT)
+
+# Załaduj ramkę danych
+data <- readRDS("final2.rds")
+
+# Wyświetl interaktywną tabelę z ograniczeniem do 10 wierszy widocznych naraz
+datatable(data, options = list(pageLength = 5))
+```
+
+## Cele projektu
+
+Moim głównym zamysłem projektu było zauważenie różnic w dostępności transportu kolejowego w Polsce. Dla mnie, poruszanie się pociągami jest codziennością: pociągiem dojeżdżałam do liceum, pociągiem podróżuję, jak wracam do siebie do rodzinnego domu - też zawsze wybieram pociąg. Znam niejedną osobę która mi takiej możliwości zazdrości. Dlaczego? Ponieważ coś, co jest dla mnie oczywistą opcją, dla wielu ludzi jest niedostępne, lub bardzo ograniczone.
+
+## 1. Liczba stacji w poszczególnych województwach.
+
+![](mapa_na_1000.html){width="600" height="600"}
+
+Mapa powyżej przedstawia liczbę stacji w poszczególnych województwach. Jak widać, we wschodniej części Polski tych stacji mamy zdecydowanie mniej niż po stronie zachodniej.
+
+## 2. Mapa gmin w Polsce bez dostępu do stacji kolejowej względem liczby ludności.
+
+![](plot1.png)
+
+Na tej mapie gminy oznaczone białym kolorem posiadają co najmniej jedną stację kolejową w swoim obrębie. Co więc możemy zauważyć? W Polsce południowo-wschodniej znajduje się zdecydowanie największa liczba gmin bez żadnej stacji. Przy samej wschodniej granicy, mamy bardzo dużo gmin bez dostępu do stacji, jednak są to gminy o stosunkowo małej liczbie ludności. Mamy też dokładnie 13 gmin o liczbie mieszkańców powyżej 30 tysięcy.\
+\> Wśród nich, Jastrzębie-Zdrój zmieszkuje aż 88 tysięcy mieszkańców. Stąd, najbliższa stacja znajduje się w Wodzisławie Śląskim 15 kilometrów dalej. Jeśli dalej rozważamy poruszanie się transportem publicznym, dotrzemy do tego miejsca autobusem w nieco ponad godzinę. Co ciekawe, kolej tutaj funkcjonowała aż do 2001 roku.
+
+## 3. Liczba odjazdów na mieszkańca w gminach.
+
+![](plot2.png)
+
+Tutaj nieco inne zestawienie. Skoro już wiemy gdzie stacje kolejowe w ogóle występują, warto sprawdzić jak się mają odjazdy względem liczby mieszkańców. Tutaj bardzo łatwo zaobserwujemy różnicę pomiędzy wschodnią a zachodnią stroną Polski. Na zachodzie liczba odjazdów w danej gminie rozkłada się raczej proporcjonalnie wobec liczby jej mieszkańców. A na wschodzie? Pełno dużych, czarnych plam. Przebijają się połączenia z Warszawy, widzimy też gdzie znajduje się Lublin, Rzeszów - miasta wojewódzkie.
+
+## 4. Liczba odjazdów a gęstość zaludnienia
+
+![](gestosc_liczbaodj.png)
+
+A jak się ma do liczby odjazdów gęstość zaludnienia? Wbrew pozorom nijak - są to dwie niezależne od siebie wielkości. Najwyżej plasujące kropki znajdziemy na wykresie poniżej.
+
+![](top20.png)
+
+Tutaj mamy 20 gmin o największej liczbie odjazdów. Gdybym ucięła do 10, wykres obejmowałby tylko i wyłącznie gminy miejskie. Natomiast na następne miejsca wskakują już gminy miejsko-wiejskie. Nie widzimy tu żadnego z miast wojewódzkich miast znajdujących się po wschodniej stronie Polski. Są one nieco dalej...
+
+\
+22. Rzeszów (woj. podkarpackie) - 420 odjazdów dziennie
+
+42\. Olsztyn (woj. warmińsko-mazurskie) - 278 odjazdów dziennie
+
+50\. Lublin (woj. lubelskie) - 231 odjazdów dziennie
+
+87\. Białystok (woj. podlaskie) - 164 odjazdy dziennie
+
+## 5. Godziny odjazdów
+
+![](godziny_gotowe.png)
+
+Powyższy wykres przedstawia łączną liczbę odjazdów o podanych godzinach. Przybiera on kształt kotka, którego uszy stanowią godziny szczytu, o których ludzie jeżdżą do pracy (7:00-8:00) oraz z niej wracają (16:00-17:00). Nie obserwujemy tutaj żadnych specjalnych odchyleń.
+
+## 6. Udział przewoźników w poszczególnych województwach
+
+![](mapa.png)
+
+Na sam koniec krótko o przewoźnikach w poszególnych regionach Polski.\
+PKP Intercity w każdym województwie stanowią około 10-20% przewozów. Pociągi Intercity Express oraz Pendolino na wykresach możemy odpowiednio wytężając wzrok, dostrzec tylko w województwach: warmińsko-mazurskim, pomorskim, lubuskim.
+
+Z daleka widoczny kolor granatowy - Polregio. Nie pojeździmy nim jedynie w woj. mazowieckim.\
+Tam, gdzie inny kolor zjada kolor granatowy, mamy oferty przewoźników takich jak: Koleje Mazowieckie, Koleje Wielkopolskie, Łódzka Kolej Aglomeracyjna, Koleje Dolnośląskie, Koleje Śląskie, Koleje Małopolskie. Są to przewoźnicy, których udziałowcami są lokalne samorządy wojewódzkie.
+
+Mamy też woj. kujawsko-pomorskie, gdzie obok Polregio widzimy ArrivaRP - spółka należąca do niemieckiego przedsiębiorstwa.
+
+Dla woj. mazowieckiego i woj. pomorskiego mamy też szybką kolej miejską pozwalającą się sprawnie poruszać po metropolii warszawskiej czy odpowiednio Trójmieście.\
+Na wcześniej pokazanym przeze mnie wykresie (Top 20 gmin o największej liczbie odjazdów) gminy miejsko-wiejskie które wskoczyły na wysokie pozycje (11,12,13,14,16) - to przede wszystkim gminy korzystające z Warszawskiej Kolei Dojazdowej.
+
+Na legendzie widnieje też LEO Express - czeski przewoźnik kolejowy. W momencie scrapowania danych odjazdy w Polsce miał z 2 stacji: Oświęcim i Kraków Główny, a dojeżdżał do Bogumina tuż przy granicy czesko-polskiej. Na chwilę obecną są to dane nieaktualne. To połączenie zapewnia nam teraz PKP Intercity.
+
+## Podsumowanie
+
+Na zakończenie chciałabym podkreślić różnice widoczne między wschodnią, a zachodnią stroną Polski.\
+Sieć kolejowa z której aktualnie korzystamy jest na zachodzie dużo lepiej rozbudowana, ze względu na niegdyś tam panujące zabory: pruski i austriacki. Stawiały one dużo bardziej na rozwój nowych tras kolejowych niż zabór rosyjski.\
+Z tym że, od tych wydarzeń minęło już wiele lat i warto by to zmienić...
+
+#### Github:
+
+<https://github.com/madzolinka/koleje_gminy>
+
+#### Użyte materiały:
+
+Mapa Polski - <https://www.geografia24.eu/index.php?strona=120_mapa_polski>
+
+#### Polecane artykuły:
+
+Miasta bez kolei pasażerkiej w Polsce: <https://pl.wikipedia.org/wiki/Miasta_bez_kolei_pasa%C5%BCerskiej_w_Polsce>
+
+Powstawanie kolei na ziemiach polskich w czasie zaborów:\
+<https://kurier-kolejowy.pl/aktualnosci/35258/powstanie-kolei-na-ziemiach-polskich-w-czasie-zaborow-1.html>
